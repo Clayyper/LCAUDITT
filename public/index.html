@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparador CLT x PJ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+
+  <main class="app-shell">
+    <section class="hero">
+      <div>
+        <span class="pill">Simulador interativo</span>
+        <h1>Comparador <span>CLT x PJ</span></h1>
+        <p>
+          Uma versão mais elegante, visual e fácil de analisar. Edite os valores e veja
+          em tempo real qual modelo oferece melhor resultado mensal estimado.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <button id="preencherPrint" class="btn btn-primary">Usar valores do print</button>
+        <button id="zerarCampos" class="btn btn-secondary">Limpar simulação</button>
+      </div>
+    </section>
+
+    <section class="top-summary">
+      <article class="summary-card summary-clt">
+        <div class="summary-label">CLT equivalente mensal</div>
+        <div class="summary-value" id="totalCltEquiv">R$ 0,00</div>
+        <div class="summary-sub" id="cltStatus">Inclui líquido + benefícios - transporte</div>
+      </article>
+
+      <article class="summary-card summary-pj">
+        <div class="summary-label">PJ líquido estimado</div>
+        <div class="summary-value" id="totalPjLiquido">R$ 0,00</div>
+        <div class="summary-sub" id="pjStatus">Receita - impostos - encargos</div>
+      </article>
+
+      <article class="summary-card summary-diff">
+        <div class="summary-label">Diferença mensal</div>
+        <div class="summary-value" id="diferenca">R$ 0,00</div>
+        <div class="summary-sub" id="mensagemVantagem">Preencha os dados para comparar</div>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <aside class="panel glass">
+        <div class="panel-header">
+          <div>
+            <h2>Entradas</h2>
+            <p>Ajuste os valores da simulação</p>
+          </div>
+          <div class="live-badge">Ao vivo</div>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="geral">Geral</button>
+          <button class="tab" data-tab="beneficios">Benefícios</button>
+          <button class="tab" data-tab="custos">Custos</button>
+        </div>
+
+        <div class="tab-content active" data-content="geral">
+          <label class="field">
+            <span>Receita PJ mensal</span>
+            <input id="receitaPj" type="number" value="27000" step="0.01" />
+          </label>
+
+          <label class="field">
+            <span>Salário bruto CLT</span>
+            <input id="salarioClt" type="number" value="13800" step="0.01" />
+          </label>
+
+          <div class="field-grid">
+            <label class="field">
+              <span>Dependentes</span>
+              <input id="dependentes" type="number" value="1" min="0" step="1" />
+            </label>
+
+            <label class="field">
+              <span>Alíquota Simples (%)</span>
+              <input id="aliquotaSimples" type="number" value="8.31" step="0.01" />
+            </label>
+          </div>
+        </div>
+
+        <div class="tab-content" data-content="beneficios">
+          <div class="field-grid">
+            <label class="field">
+              <span>Plano de saúde</span>
+              <input id="planoSaude" type="number" value="750" step="0.01" />
+            </label>
+
+            <label class="field">
+              <span>Refeição</span>
+              <input id="refeicao" type="number" value="589.6" step="0.01" />
+            </label>
+          </div>
+
+          <label class="field">
+            <span>Outros benefícios</span>
+            <input id="outrosBeneficios" type="number" value="600" step="0.01" />
+          </label>
+        </div>
+
+        <div class="tab-content" data-content="custos">
+          <div class="field-grid">
+            <label class="field">
+              <span>Transporte</span>
+              <input id="transporte" type="number" value="440" step="0.01" />
+            </label>
+
+            <label class="field">
+              <span>Contador mensal</span>
+              <input id="contador" type="number" value="350" step="0.01" />
+            </label>
+          </div>
+
+          <label class="field">
+            <span>Contador 13º provisão</span>
+            <input id="contador13" type="number" value="29.17" step="0.01" />
+          </label>
+
+          <label class="switch">
+            <input type="checkbox" id="considerarTransporte" checked />
+            <span>Considerar transporte na equivalência CLT</span>
+          </label>
+        </div>
+      </aside>
+
+      <section class="dashboard">
+        <div class="row row-2">
+          <article class="panel glass">
+            <div class="panel-header">
+              <div>
+                <h2>Comparação visual</h2>
+                <p>Veja rapidamente qual opção vence</p>
+              </div>
+            </div>
+
+            <div class="compare-bars">
+              <div class="bar-item">
+                <div class="bar-top">
+                  <span>CLT</span>
+                  <strong id="barCltLabel">R$ 0,00</strong>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill clt" id="barClt"></div>
+                </div>
+              </div>
+
+              <div class="bar-item">
+                <div class="bar-top">
+                  <span>PJ</span>
+                  <strong id="barPjLabel">R$ 0,00</strong>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill pj" id="barPj"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="winner-box" id="winnerBox">
+              Preencha os campos para ver a recomendação visual.
+            </div>
+          </article>
+
+          <article class="panel glass">
+            <div class="panel-header">
+              <div>
+                <h2>Radar financeiro</h2>
+                <p>Distribuição simplificada de ganhos e descontos</p>
+              </div>
+            </div>
+
+            <div class="mini-metrics">
+              <div class="metric">
+                <span>Líquido CLT</span>
+                <strong id="miniCltLiquido">R$ 0,00</strong>
+              </div>
+              <div class="metric">
+                <span>Benefícios</span>
+                <strong id="miniBeneficios">R$ 0,00</strong>
+              </div>
+              <div class="metric">
+                <span>Encargos PJ</span>
+                <strong id="miniEncargos">R$ 0,00</strong>
+              </div>
+              <div class="metric">
+                <span>Pró-labore</span>
+                <strong id="miniProlabore">R$ 0,00</strong>
+              </div>
+            </div>
+
+            <div class="gauge-wrap">
+              <div class="gauge" id="gaugeCircle">
+                <div class="gauge-inner">
+                  <span>vantagem</span>
+                  <strong id="gaugePercent">0%</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="row row-2">
+          <article class="panel glass">
+            <div class="panel-header">
+              <div>
+                <h2>Detalhamento CLT</h2>
+                <p>Composição mensal estimada</p>
+              </div>
+            </div>
+
+            <div class="data-list">
+              <div class="data-row"><span>Salário bruto</span><strong id="cltBruto"></strong></div>
+              <div class="data-row"><span>INSS</span><strong id="cltInss"></strong></div>
+              <div class="data-row"><span>Base IRRF</span><strong id="cltBaseIrrf"></strong></div>
+              <div class="data-row"><span>IRRF</span><strong id="cltIrrf"></strong></div>
+              <div class="data-row"><span>Líquido CLT</span><strong id="cltLiquido"></strong></div>
+              <div class="data-row"><span>Total benefícios</span><strong id="cltBeneficios"></strong></div>
+              <div class="data-row highlight"><span>CLT equivalente</span><strong id="cltEquivalente"></strong></div>
+            </div>
+          </article>
+
+          <article class="panel glass">
+            <div class="panel-header">
+              <div>
+                <h2>Detalhamento PJ</h2>
+                <p>Composição mensal estimada</p>
+              </div>
+            </div>
+
+            <div class="data-list">
+              <div class="data-row"><span>Receita PJ</span><strong id="pjReceita"></strong></div>
+              <div class="data-row"><span>Impostos NF</span><strong id="pjImpostosNf"></strong></div>
+              <div class="data-row"><span>Contador</span><strong id="pjContador"></strong></div>
+              <div class="data-row"><span>Pró-labore</span><strong id="pjProLabore"></strong></div>
+              <div class="data-row"><span>INSS pró-labore</span><strong id="pjInss"></strong></div>
+              <div class="data-row"><span>IRRF pró-labore</span><strong id="pjIrrf"></strong></div>
+              <div class="data-row highlight"><span>PJ líquido estimado</span><strong id="pjLiquido"></strong></div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

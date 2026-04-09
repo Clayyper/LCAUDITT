@@ -1,0 +1,12 @@
+{
+  "name": "comparador-clt-pj-designer",
+  "version": "2.0.0",
+  "description": "Comparador CLT x PJ com visual moderno e interativo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
